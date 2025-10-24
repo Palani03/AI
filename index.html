@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AI for Detecting Evasive Malware — Demo</title>
+
+  <!-- Bootstrap 5 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <!-- Lottie player -->
+  <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-dark text-light">
+
+  <!-- NAV -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-transparent px-4 py-3">
+    <a class="navbar-brand fw-bold" href="#">AI • Evasive Malware Demo</a>
+    <div class="ms-auto">
+      <button class="btn btn-outline-light btn-sm" id="themeToggle"><i class="fa fa-sun me-1"></i> Theme</button>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <header class="container my-4">
+    <div class="card hero-card overflow-hidden">
+      <div class="row g-0 align-items-center">
+        <div class="col-lg-7 p-4">
+          <h1 class="display-6 mb-2">AI for Detecting Evasive Malware</h1>
+          <p class="lead text-muted mb-3">
+            Educational demo — simulated detection for presentations. This demo <strong>does not</strong> execute or analyze real malware.
+            Use benign test files only.
+          </p>
+
+          <div class="d-flex gap-2 flex-wrap">
+            <label class="btn btn-primary btn-lg mb-2" for="fileInput">
+              <i class="fa fa-file-upload me-2"></i> Choose File
+            </label>
+            <button class="btn btn-outline-light btn-lg mb-2" id="scanBtn"><i class="fa fa-shield-virus me-2"></i> Scan (Simulated)</button>
+            <button class="btn btn-light btn-lg mb-2" id="resetBtn"><i class="fa fa-rotate-left me-2"></i> Reset</button>
+          </div>
+
+          <div class="mt-3">
+            <small class="text-muted">Tip: Use sample benign files (text, images) — this is a demo only.</small>
+          </div>
+        </div>
+
+        <div class="col-lg-5 p-3 d-flex justify-content-center">
+          <!-- Lottie animation -->
+          <div style="max-width:360px;">
+            <lottie-player src="https://assets6.lottiefiles.com/packages/lf20_6kuexq5q.json"  background="transparent"  speed="1"  loop  autoplay></lottie-player>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN -->
+  <main class="container mb-5">
+    <div class="row g-4">
+
+      <!-- Left: Upload & Results -->
+      <div class="col-lg-7">
+        <div class="card p-3">
+          <h5 class="mb-3"><i class="fa fa-file me-2"></i> Upload & Scan</h5>
+
+          <input type="file" id="fileInput" class="form-control mb-3" style="display:none;">
+          <div id="dropZone" class="drop-zone border rounded p-4 text-center">
+            <i class="fa fa-cloud-arrow-up fa-2x mb-2"></i>
+            <div class="mb-2 fw-semibold">Drag & drop a file here — or click <u>Choose File</u></div>
+            <div class="small text-muted">Supports any file type (demo). Files are not uploaded to any server — processing is client-side and simulated.</div>
+          </div>
+
+          <div class="mt-3" id="scanArea" style="display:none;">
+            <div class="d-flex align-items-center justify-content-between">
+              <div>
+                <div id="fileName" class="fw-bold"></div>
+                <div id="fileMeta" class="small text-muted"></div>
+              </div>
+              <div id="badgeWrap"></div>
+            </div>
+
+            <div class="my-3">
+              <div class="progress" style="height:12px;">
+                <div class="progress-bar progress-bar-striped progress-bar-animated" id="scanProgress" role="progressbar" style="width:0%"></div>
+              </div>
+              <div class="small mt-2 text-muted" id="scanStatus">Ready to scan</div>
+            </div>
+
+            <div id="resultPanel" style="display:none;">
+              <h6>Scan result</h6>
+              <div class="card bg-dark border-light p-3 mb-3">
+                <div><strong>Simulated Threat:</strong> <span id="threatName">—</span></div>
+                <div><strong>Confidence:</strong> <span id="threatScore">—</span></div>
+                <div><strong>SHA256 (sim):</strong> <code id="sha256Sim">—</code></div>
+                <div class="mt-2"><strong>Reasons:</strong>
+                  <ul id="reasonsList"></ul>
+                </div>
+              </div>
+
+              <div class="card bg-dark border-light p-3">
+                <h6>Suggested legitimate sources</h6>
+                <div id="suggestions"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sample test files & demo notes -->
+        <div class="card p-3 mt-3">
+          <h6>Demo notes</h6>
+          <ul class="small text-muted">
+            <li>All scanning and AI responses are <strong>simulated</strong> for demonstration. This is safe for stage demos.</li>
+            <li>To demo “malicious” detection, upload sample files named like <code>photoshop_crack.zip</code> or <code>game_crack.exe</code> to trigger suggestions (simulation).</li>
+            <li>Do not upload private or sensitive files to public demos.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Right: Chat Assistant -->
+      <div class="col-lg-5">
+        <div class="card p-3 h-100">
+          <h5 class="mb-3"><i class="fa fa-comments me-2"></i> Assistant (Simulated AI)</h5>
+
+          <div class="chat-window border rounded p-2 mb-3" id="chatWindow" style="height:360px; overflow:auto; background:rgba(255,255,255,0.02);">
+            <div class="text-muted small text-center mb-2">Assistant ready. Click “Attach last scan” to include scan context.</div>
+          </div>
+
+          <div class="mb-2">
+            <input id="chatInput" class="form-control mb-2" placeholder="Ask: Is this file safe? How to remove? Where to get official software?">
+            <div class="d-flex gap-2">
+              <button id="sendBtn" class="btn btn-primary flex-fill"><i class="fa fa-paper-plane me-2"></i>Send</button>
+              <button id="attachBtn" class="btn btn-outline-light"><i class="fa fa-paperclip me-1"></i>Attach last scan</button>
+            </div>
+          </div>
+
+          <div class="mt-3 small text-muted">
+            <strong>Privacy:</strong> Chat is simulated locally. For production, integrate a secure AI inference API.
+          </div>
+        </div>
+
+        <div class="card p-3 mt-3">
+          <h6>Ethics & Warnings</h6>
+          <p class="small text-muted">
+            ⚠️ This site is an educational demo. It does not analyze real malware. Do not rely on it for security decisions. Do not upload sensitive/private data.
+          </p>
+          <div class="small text-muted">Deploy: Use GitHub Pages (static) or any static host. See README for instructions.</div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <footer class="text-center py-3 text-muted">
+    © Demo • Use responsibly • Built for presentations
+  </footer>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
